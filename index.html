@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="neon">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <meta name="theme-color" content="#00e5ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Inventory" />
+  <title>Inventory Manager — Dilshad</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ══════════════════════════════════════
+       THEMES
+    ══════════════════════════════════════ */
+
+    /* 1. NEON (default dark) */
+    [data-theme="neon"] {
+      --bg-grad: radial-gradient(ellipse at 20% 20%, #1a0010 0%, #0d0d0d 40%, #00101a 100%);
+      --card-bg: rgba(14,14,14,0.9);
+      --border: rgba(0,229,255,0.2);
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --accent1: #00e5ff;
+      --accent2: #ff1744;
+      --header-grad: linear-gradient(90deg, #80f5ff, #ff1744, #00e5ff);
+      --btn-grad: linear-gradient(135deg, #00e5ff, #ff1744);
+      --grid-color: rgba(0,229,255,0.04);
+      --table-bg: rgba(10,5,5,0.85);
+      --thead-bg: linear-gradient(135deg, rgba(0,229,255,0.15), rgba(255,23,68,0.08));
+      --row-hover: rgba(0,229,255,0.07);
+      --input-bg: rgba(255,255,255,0.05);
+      --glow1: rgba(255,23,68,0.08);
+      --glow2: rgba(0,229,255,0.06);
+      --welcome-col: #00e5ff;
+    }
+
+    /* 2. OCEAN (dark blue) */
+    [data-theme="ocean"] {
+      --bg-grad: radial-gradient(ellipse at 30% 20%, #001428 0%, #000d1a 50%, #001428 100%);
+      --card-bg: rgba(0,15,35,0.92);
+      --border: rgba(0,180,255,0.25);
+      --text: #cce8ff;
+      --muted: #4a7a9b;
+      --accent1: #00b4ff;
+      --accent2: #0066ff;
+      --header-grad: linear-gradient(90deg, #00b4ff, #0044ff, #00e5ff);
+      --btn-grad: linear-gradient(135deg, #0066ff, #00b4ff);
+      --grid-color: rgba(0,180,255,0.04);
+      --table-bg: rgba(0,10,25,0.9);
+      --thead-bg: linear-gradient(135deg, rgba(0,100,255,0.2), rgba(0,180,255,0.1));
+      --row-hover: rgba(0,180,255,0.08);
+      --input-bg: rgba(0,100,255,0.08);
+      --glow1: rgba(0,100,255,0.08);
+      --glow2: rgba(0,180,255,0.06);
+      --welcome-col: #00b4ff;
+    }
+
+    /* 3. FOREST (dark green) */
+    [data-theme="forest"] {
+      --bg-grad: radial-gradient(ellipse at 20% 30%, #001a0a 0%, #050f05 50%, #001a0f 100%);
+      --card-bg: rgba(5,18,8,0.92);
+      --border: rgba(0,200,80,0.22);
+      --text: #c8ecd4;
+      --muted: #3d7a55;
+      --accent1: #00c850;
+      --accent2: #00ff88;
+      --header-grad: linear-gradient(90deg, #00ff88, #00c850, #80ffcc);
+      --btn-grad: linear-gradient(135deg, #00a040, #00ff88);
+      --grid-color: rgba(0,200,80,0.04);
+      --table-bg: rgba(2,12,5,0.9);
+      --thead-bg: linear-gradient(135deg, rgba(0,180,60,0.18), rgba(0,255,100,0.07));
+      --row-hover: rgba(0,200,80,0.08);
+      --input-bg: rgba(0,200,80,0.07);
+      --glow1: rgba(0,180,60,0.08);
+      --glow2: rgba(0,255,100,0.06);
+      --welcome-col: #00ff88;
+    }
+
+    /* 4. SUNSET (dark warm) */
+    [data-theme="sunset"] {
+      --bg-grad: radial-gradient(ellipse at 20% 20%, #1a0800 0%, #100500 50%, #1a0a00 100%);
+      --card-bg: rgba(20,8,0,0.92);
+      --border: rgba(255,140,0,0.22);
+      --text: #ffe8cc;
+      --muted: #8a5a30;
+      --accent1: #ff8c00;
+      --accent2: #ff3300;
+      --header-grad: linear-gradient(90deg, #ffcc00, #ff6600, #ff3300);
+      --btn-grad: linear-gradient(135deg, #ff6600, #ffcc00);
+      --grid-color: rgba(255,140,0,0.04);
+      --table-bg: rgba(15,5,0,0.9);
+      --thead-bg: linear-gradient(135deg, rgba(255,100,0,0.18), rgba(255,200,0,0.08));
+      --row-hover: rgba(255,140,0,0.08);
+      --input-bg: rgba(255,140,0,0.07);
+      --glow1: rgba(255,100,0,0.1);
+      --glow2: rgba(255,200,0,0.06);
+      --welcome-col: #ffaa00;
+    }
+
+    /* 5. LIGHT */
+    [data-theme="light"] {
+      --bg-grad: linear-gradient(135deg, #f0f4ff 0%, #ffffff 50%, #f5f0ff 100%);
+      --card-bg: rgba(255,255,255,0.95);
+      --border: rgba(100,120,255,0.2);
+      --text: #1e2340;
+      --muted: #7a85aa;
+      --accent1: #4455ff;
+      --accent2: #ff2255;
+      --header-grad: linear-gradient(90deg, #4455ff, #ff2255, #7744ff);
+      --btn-grad: linear-gradient(135deg, #4455ff, #ff2255);
+      --grid-color: rgba(100,120,255,0.05);
+      --table-bg: rgba(245,247,255,0.95);
+      --thead-bg: linear-gradient(135deg, rgba(68,85,255,0.1), rgba(255,34,85,0.06));
+      --row-hover: rgba(68,85,255,0.06);
+      --input-bg: rgba(68,85,255,0.04);
+      --glow1: rgba(68,85,255,0.06);
+      --glow2: rgba(255,34,85,0.04);
+      --welcome-col: #4455ff;
+    }
+
+    /* ══════════════════════════════════════
+       BASE STYLES
+    ══════════════════════════════════════ */
+    body {
+      min-height: 100vh;
+      background: var(--bg-grad);
+      font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.3s;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--grid-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse at center, black 40%, transparent 80%);
+    }
+
+    .wrap { position: relative; z-index: 1; padding: 20px 16px 60px; max-width: 600px; margin: 0 auto; }
+
+    /* ── THEME BAR ── */
+    .theme-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin-bottom: 18px; flex-wrap: wrap;
+    }
+    .theme-bar span {
+      font-size: 10px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); margin-right: 4px;
+    }
+    .theme-btn {
+      width: 30px; height: 30px; border-radius: 50%; border: 2px solid transparent;
+      cursor: pointer; transition: all 0.2s; position: relative;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px;
+    }
+    .theme-btn:hover { transform: scale(1.15); }
+    .theme-btn.active { border-color: var(--accent1); box-shadow: 0 0 10px var(--accent1); }
+    .theme-btn[data-t="neon"]   { background: linear-gradient(135deg,#00e5ff,#ff1744); }
+    .theme-btn[data-t="ocean"]  { background: linear-gradient(135deg,#0044ff,#00b4ff); }
+    .theme-btn[data-t="forest"] { background: linear-gradient(135deg,#004d20,#00ff88); }
+    .theme-btn[data-t="sunset"] { background: linear-gradient(135deg,#ff3300,#ffcc00); }
+    .theme-btn[data-t="light"]  { background: linear-gradient(135deg,#f0f4ff,#4455ff); border-color: #ccc; }
+
+    /* ── HEADER ── */
+    .header { text-align: center; margin-bottom: 28px; }
+    .welcome-text {
+      font-size: 13px; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--welcome-col); margin-bottom: 6px; font-weight: 600;
+      opacity: 0.85;
+    }
+    .header .icon {
+      font-size: 46px; display: inline-block;
+      filter: drop-shadow(0 0 20px rgba(167,139,250,0.8));
+      animation: float3d 4s ease-in-out infinite;
+    }
+    .header h1 {
+      font-size: 20px; font-weight: 900; letter-spacing: 4px; margin-top: 6px;
+      font-family: 'Orbitron', monospace;
+      background: var(--header-grad);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .header p { color: var(--muted); font-size: 12px; letter-spacing: 2px; margin-top: 6px; text-transform: uppercase; }
+    .glow-line {
+      width: 100px; height: 2px; margin: 10px auto 0;
+      background: linear-gradient(90deg, transparent, var(--accent1), var(--accent2), transparent);
+      border-radius: 2px;
+    }
+
+    /* ── INSTALL BANNER ── */
+    #install-banner {
+      display: none;
+      background: linear-gradient(135deg, rgba(0,229,255,0.1), rgba(56,189,248,0.08));
+      border: 1px solid var(--border); border-radius: 14px;
+      padding: 14px 18px; margin-bottom: 20px; align-items: center; gap: 12px;
+    }
+    #install-banner.show { display: flex; }
+    #install-banner p { font-size: 13px; color: var(--accent1); flex: 1; }
+    #install-banner button {
+      background: var(--btn-grad); color: #fff; border: none;
+      padding: 8px 16px; border-radius: 9px; font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--card-bg); backdrop-filter: blur(20px);
+      border-radius: 22px; border: 1px solid var(--border);
+      padding: 26px 22px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.07);
+      margin-bottom: 28px; position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .card::before { content:""; position:absolute; top:0; left:50%; transform:translateX(-50%); width:80px; height:2px; background:var(--accent1); border-radius:2px; box-shadow:0 0 16px var(--accent1); }
+    .card::after  { content:""; position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:60px; height:2px; background:var(--accent2); border-radius:2px; box-shadow:0 0 12px var(--accent2); }
+    .card-title { display:flex; align-items:center; gap:10px; margin-bottom:22px; }
+    .card-title .badge {
+      width:34px; height:34px; border-radius:10px;
+      background: var(--btn-grad);
+      display:flex; align-items:center; justify-content:center;
+      font-size:16px; flex-shrink:0;
+    }
+    .card-title h2 { font-size:17px; font-weight:800; color:var(--text); }
+
+    /* ── FORM ── */
+    .field { margin-bottom: 16px; }
+    .field label { display:flex; align-items:center; gap:6px; font-size:11px; font-weight:700; color:var(--muted); margin-bottom:7px; text-transform:uppercase; letter-spacing:1px; }
+    .field input {
+      width:100%; padding:12px 15px; border-radius:11px; font-size:15px;
+      background: var(--input-bg); border:1.5px solid var(--border);
+      color:var(--text); outline:none; transition:all 0.2s;
+      box-shadow:inset 0 2px 8px rgba(0,0,0,0.1); -webkit-appearance:none;
+    }
+    .field input:focus { border-color:var(--accent1); box-shadow:inset 0 2px 8px rgba(0,0,0,0.1), 0 0 0 3px rgba(0,229,255,0.12); }
+    .field input.err { border-color:rgba(255,107,107,0.8); background:rgba(255,80,80,0.06); }
+    .field .errmsg { color:#ff6b6b; font-size:12px; margin-top:5px; }
+    .field input::placeholder { color:var(--muted); opacity:0.5; }
+
+    /* ── BUTTONS ── */
+    .btn-row { display:flex; gap:10px; margin-top:10px; }
+    .btn { padding:13px 20px; border-radius:13px; border:none; cursor:pointer; font-weight:700; font-size:15px; transition:all 0.15s; position:relative; }
+    .btn:active { transform:translateY(3px) scale(0.97) !important; }
+    .btn-primary { flex:1; background:var(--btn-grad); color:#fff; box-shadow:0 6px 20px rgba(0,0,0,0.25); }
+    .btn-primary:hover { filter:brightness(1.1); }
+    .btn-ghost { background:rgba(255,255,255,0.06); border:1.5px solid rgba(255,255,255,0.15) !important; color:var(--muted); }
+    .btn-success { background:linear-gradient(135deg,#00c896,#059669); color:#fff; font-size:13px; padding:10px 16px; box-shadow:0 6px 20px rgba(0,200,150,0.3); }
+    .btn-sheets  { background:linear-gradient(135deg,#1a7a42,#0db854); color:#fff; font-size:13px; padding:10px 16px; box-shadow:0 6px 20px rgba(0,180,80,0.3); }
+    .btn-edit    { padding:5px 13px; font-size:12px; border-radius:8px; background:rgba(0,229,255,0.15); color:var(--accent1); }
+    .btn-del     { padding:5px 13px; font-size:12px; border-radius:8px; background:rgba(255,80,80,0.12); color:#ff6b6b; }
+    .btn-danger  { padding:10px 26px; border-radius:10px; border:none; cursor:pointer; background:linear-gradient(135deg,#ef4444,#dc2626); color:#fff; font-weight:700; font-size:14px; }
+
+    /* ── TABLE ── */
+    .table-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+    .table-header h3 { font-size:17px; font-weight:800; color:var(--text); }
+    .table-header p { font-size:11px; color:var(--muted); letter-spacing:1px; margin-top:3px; }
+    .table-header-btns { display:flex; gap:8px; flex-wrap:wrap; }
+
+    .table-wrap { border-radius:18px; overflow:hidden; border:1px solid var(--border); box-shadow:0 20px 60px rgba(0,0,0,0.3); background:var(--table-bg); backdrop-filter:blur(20px); }
+    table { width:100%; border-collapse:collapse; font-size:13px; }
+    thead tr { background:var(--thead-bg); border-bottom:1px solid var(--border); }
+    th { padding:13px 14px; text-align:left; color:var(--accent1); font-weight:800; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; white-space:nowrap; }
+    tbody tr { border-bottom:1px solid rgba(255,255,255,0.04); transition:all 0.2s; animation:rowIn 0.3s ease both; }
+    tbody tr:hover { background:var(--row-hover); transform:translateX(3px); }
+    tbody tr:last-child { border-bottom:none; }
+    td { padding:12px 14px; vertical-align:middle; color:var(--text); }
+    .td-num { color:var(--muted); font-weight:700; font-size:12px; }
+    .td-ri span { background:rgba(255,23,68,0.12); color:var(--accent2); padding:3px 10px; border-radius:7px; font-size:12px; font-weight:700; border:1px solid rgba(255,23,68,0.2); }
+    .td-qty { color:var(--accent1); font-weight:800; font-size:15px; }
+    .td-loc { color:var(--muted); font-size:12px; }
+    .td-actions div { display:flex; gap:6px; }
+
+    /* ── EMPTY ── */
+    .empty { text-align:center; padding:48px 16px; color:var(--muted); }
+    .empty .eicon { font-size:44px; opacity:0.3; margin-bottom:12px; }
+    .empty p { font-size:13px; letter-spacing:1px; }
+
+    /* ── TOAST ── */
+    #toast { position:fixed; top:20px; right:16px; z-index:9999; padding:13px 22px; border-radius:13px; font-weight:700; font-size:14px; color:#fff; border:1px solid rgba(255,255,255,0.2); display:none; max-width:calc(100vw - 32px); }
+    #toast.show { display:block; animation:toastIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
+    #toast.success { background:linear-gradient(135deg,#00c896,#059669); }
+    #toast.error   { background:linear-gradient(135deg,#ff4d4d,#dc2626); }
+
+    /* ── MODAL ── */
+    #modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.75); backdrop-filter:blur(8px); align-items:center; justify-content:center; z-index:888; padding:16px; }
+    #modal-overlay.show { display:flex; }
+    .modal-box { background:var(--card-bg); border:1px solid rgba(239,68,68,0.3); border-radius:20px; padding:32px 28px; text-align:center; max-width:320px; width:100%; box-shadow:0 24px 80px rgba(239,68,68,0.2); animation:toastIn 0.3s ease both; }
+    .modal-box .micon { font-size:42px; margin-bottom:12px; }
+    .modal-box h3 { color:var(--text); font-size:17px; margin-bottom:8px; }
+    .modal-box p  { color:var(--muted); font-size:13px; margin-bottom:22px; }
+    .modal-btns { display:flex; gap:10px; justify-content:center; }
+
+    /* ── SHEETS MODAL ── */
+    #sheets-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.82); backdrop-filter:blur(10px); align-items:center; justify-content:center; z-index:999; padding:16px; }
+    #sheets-modal.show { display:flex; }
+    .sheets-box { background:var(--card-bg); border:1px solid rgba(0,200,80,0.25); border-radius:22px; padding:28px 24px; max-width:380px; width:100%; box-shadow:0 24px 80px rgba(0,180,80,0.15); animation:toastIn 0.3s ease both; }
+    .sheets-input { width:100%; padding:11px 14px; border-radius:11px; font-size:13px; background:var(--input-bg); border:1.5px solid var(--border); color:var(--text); outline:none; }
+    .sheets-input:focus { border-color:#00c850; }
+    .sheets-status { display:none; margin-top:14px; text-align:center; font-size:13px; font-weight:700; padding:10px; border-radius:10px; }
+
+    /* ── PARTICLES ── */
+    .particle { position:fixed; border-radius:50%; pointer-events:none; background:rgba(167,139,250,0.2); animation:float linear infinite alternate; }
+    .corner-glow-tl { position:fixed; width:250px; height:250px; top:-80px; left:-80px; border-radius:50%; background:var(--glow1); filter:blur(80px); pointer-events:none; z-index:0; }
+    .corner-glow-br { position:fixed; width:250px; height:250px; bottom:-80px; right:-80px; border-radius:50%; background:var(--glow2); filter:blur(80px); pointer-events:none; z-index:0; }
+
+    /* ── ANIMATIONS ── */
+    @keyframes float3d { 0%,100%{transform:translateY(0) rotateY(0deg)} 50%{transform:translateY(-8px) rotateY(10deg)} }
+    @keyframes float { from{transform:translateY(0) translateX(0)} to{transform:translateY(-35px) translateX(20px)} }
+    @keyframes toastIn { from{opacity:0;transform:translateX(30px) scale(0.9)} to{opacity:1;transform:translateX(0) scale(1)} }
+    @keyframes rowIn { from{opacity:0;transform:translateX(-15px)} to{opacity:1;transform:translateX(0)} }
+
+    ::-webkit-scrollbar { width:4px; height:4px; }
+    ::-webkit-scrollbar-track { background:transparent; }
+    ::-webkit-scrollbar-thumb { background:rgba(0,229,255,0.3); border-radius:4px; }
+    .table-scroll { overflow-x:auto; }
+  </style>
+</head>
+<body>
+
+<div class="corner-glow-tl"></div>
+<div class="corner-glow-br"></div>
+<div id="particles"></div>
+
+<div class="wrap">
+
+  <!-- Install Banner -->
+  <div id="install-banner">
+    <p>📲 Phone pe install karo — offline bhi kaam karega!</p>
+    <button id="install-btn">Install</button>
+  </div>
+
+  <!-- Theme Bar -->
+  <div class="theme-bar">
+    <span>Theme:</span>
+    <button class="theme-btn active" data-t="neon"   title="Neon"></button>
+    <button class="theme-btn"        data-t="ocean"  title="Ocean"></button>
+    <button class="theme-btn"        data-t="forest" title="Forest"></button>
+    <button class="theme-btn"        data-t="sunset" title="Sunset"></button>
+    <button class="theme-btn"        data-t="light"  title="Light">☀️</button>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="welcome-text">✦ Welcome, Dilshad ✦</div>
+    <div class="icon">📦</div>
+    <h1>INVENTORY MANAGER</h1>
+    <p id="count-text">0 items in database</p>
+    <div class="glow-line"></div>
+  </div>
+
+  <!-- Form Card -->
+  <div class="card" id="form-card">
+    <div class="card-title">
+      <div class="badge" id="form-badge">➕</div>
+      <h2 id="form-title">Add New Item</h2>
+    </div>
+    <div class="field">
+      <label>📝 Description</label>
+      <input type="text" id="f-desc" placeholder="e.g. Steel Pipe 2 inch" />
+      <div class="errmsg" id="e-desc"></div>
+    </div>
+    <div class="field">
+      <label>🔖 RI No</label>
+      <input type="text" id="f-ri" placeholder="e.g. RI-2024-001" />
+      <div class="errmsg" id="e-ri"></div>
+    </div>
+    <div class="field">
+      <label>🔢 Quantity</label>
+      <input type="number" id="f-qty" placeholder="e.g. 50" inputmode="numeric" />
+      <div class="errmsg" id="e-qty"></div>
+    </div>
+    <div class="field">
+      <label>📍 Location</label>
+      <input type="text" id="f-loc" placeholder="e.g. Warehouse A, Rack 3" />
+      <div class="errmsg" id="e-loc"></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="save-btn" onclick="handleSave()">💾 Save Item</button>
+      <button class="btn btn-ghost" id="cancel-btn" onclick="handleCancel()" style="display:none">Cancel</button>
+    </div>
+  </div>
+
+  <!-- Records Section -->
+  <div id="records-section" style="display:none">
+    <div class="table-header">
+      <div>
+        <h3>📋 Inventory Records</h3>
+        <p id="table-count">0 TOTAL ENTRIES</p>
+      </div>
+      <div class="table-header-btns">
+        <button class="btn btn-success" onclick="exportCSV()">📥 Export</button>
+        <button class="btn btn-sheets"  onclick="openSheetsModal()">🟢 Sheets</button>
+      </div>
+    </div>
+    <div class="table-wrap">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th><th>Description</th><th>RI No</th>
+              <th>Qty</th><th>Location</th><th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty" id="empty-state">
+    <div class="eicon">🗃️</div>
+    <p>No items yet. Add your first item above!</p>
+  </div>
+
+</div><!-- /wrap -->
+
+<!-- Toast -->
+<div id="toast"></div>
+
+<!-- Delete Modal -->
+<div id="modal-overlay">
+  <div class="modal-box">
+    <div class="micon">🗑️</div>
+    <h3>Delete this record?</h3>
+    <p>This action cannot be undone.</p>
+    <div class="modal-btns">
+      <button class="btn-danger" id="confirm-del-btn">Delete</button>
+      <button class="btn btn-ghost" onclick="closeModal()" style="padding:10px 22px;font-size:14px">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Google Sheets Modal -->
+<div id="sheets-modal">
+  <div class="sheets-box">
+    <div style="text-align:center;margin-bottom:20px;">
+      <div style="font-size:36px;margin-bottom:8px;">🟢</div>
+      <h3 style="color:var(--text);font-size:17px;font-weight:800;">Send to Google Sheets</h3>
+      <p style="color:var(--muted);font-size:12px;margin-top:6px;">Sab records seedha Google Sheet mein jayenge</p>
+    </div>
+    <div style="background:rgba(0,200,80,0.08);border:1px solid rgba(0,200,80,0.2);border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:12px;color:var(--muted);line-height:1.9;">
+      📋 <b style="color:var(--accent1);">Sheet mein ye columns aayenge:</b><br>
+      S.No &nbsp;|&nbsp; Description &nbsp;|&nbsp; RI No &nbsp;|&nbsp; Quantity &nbsp;|&nbsp; Location &nbsp;|&nbsp; Date &amp; Time
+    </div>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <button onclick="sendAllToSheets()" style="flex:1;padding:13px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,#00c850,#009940);color:#fff;font-weight:800;font-size:15px;">
+        📤 Sab Bhejo (<?= records.length ?> Records)
+      </button>
+      <button onclick="closeSheetsModal()" style="padding:13px 18px;border-radius:12px;border:1.5px solid var(--border);cursor:pointer;background:var(--input-bg);color:var(--muted);font-weight:700;font-size:14px;">
+        Cancel
+      </button>
+    </div>
+    <div class="sheets-status" id="sheets-status"></div>
+  </div>
+</div>
+
+<script>
+  // ── GOOGLE SHEETS URL ────────────────────────────────────────
+  const SHEETS_URL = "https://script.google.com/macros/s/AKfycbwelG96EX8ZrIGr0NXZ8-WUSKAhNFtuFQ2tcFieQ89vBCaHgoqsgwOwSKIO9iJD6oRG/exec";
+
+  // ── DATA ──────────────────────────────────────────────────────
+  const STORAGE_KEY = "inventory_records_v1";
+  let records = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+  let editId = null, deleteId = null;
+
+  function save() { localStorage.setItem(STORAGE_KEY, JSON.stringify(records)); }
+  function genId() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
+
+  // ── THEME ─────────────────────────────────────────────────────
+  const THEME_KEY = "inv_theme";
+  let activeTheme = localStorage.getItem(THEME_KEY) || "neon";
+
+  function applyTheme(t) {
+    activeTheme = t;
+    document.documentElement.setAttribute("data-theme", t);
+    localStorage.setItem(THEME_KEY, t);
+    document.querySelectorAll(".theme-btn").forEach(b => {
+      b.classList.toggle("active", b.dataset.t === t);
+    });
+  }
+
+  document.querySelectorAll(".theme-btn").forEach(btn => {
+    btn.addEventListener("click", () => applyTheme(btn.dataset.t));
+  });
+
+  applyTheme(activeTheme);
+
+  // ── RENDER ────────────────────────────────────────────────────
+  function render() {
+    const tbody = document.getElementById("table-body");
+    const section = document.getElementById("records-section");
+    const empty = document.getElementById("empty-state");
+    document.getElementById("count-text").textContent = `${records.length} item${records.length!==1?"s":""} in database`;
+    document.getElementById("table-count").textContent = `${records.length} TOTAL ENTRIES`;
+
+    if (records.length === 0) { section.style.display="none"; empty.style.display="block"; return; }
+    section.style.display="block"; empty.style.display="none";
+
+    tbody.innerHTML = records.map((r,i) => `
+      <tr style="animation-delay:${i*0.04}s">
+        <td class="td-num">${i+1}</td>
+        <td class="td-desc">${esc(r.description)}</td>
+        <td class="td-ri"><span>${esc(r.riNo)}</span></td>
+        <td class="td-qty">${esc(r.quantity)}</td>
+        <td class="td-loc">📍 ${esc(r.location)}</td>
+        <td class="td-actions">
+          <div>
+            <button class="btn btn-edit" onclick="startEdit('${r.id}')">Edit</button>
+            <button class="btn btn-del"  onclick="askDelete('${r.id}')">Del</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  function esc(s) { return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+  // ── FORM ──────────────────────────────────────────────────────
+  function getForm() {
+    return {
+      description: document.getElementById("f-desc").value.trim(),
+      riNo:        document.getElementById("f-ri").value.trim(),
+      quantity:    document.getElementById("f-qty").value.trim(),
+      location:    document.getElementById("f-loc").value.trim(),
+    };
+  }
+  function setForm(r) {
+    document.getElementById("f-desc").value = r.description||"";
+    document.getElementById("f-ri").value   = r.riNo||"";
+    document.getElementById("f-qty").value  = r.quantity||"";
+    document.getElementById("f-loc").value  = r.location||"";
+  }
+  function clearForm() {
+    setForm({description:"",riNo:"",quantity:"",location:""});
+    ["e-desc","e-ri","e-qty","e-loc"].forEach(id=>document.getElementById(id).textContent="");
+    ["f-desc","f-ri","f-qty","f-loc"].forEach(id=>document.getElementById(id).classList.remove("err"));
+  }
+  function validate(f) {
+    const e={};
+    if(!f.description) e.description="⚠ Required";
+    if(!f.riNo)        e.riNo="⚠ Required";
+    if(!f.quantity)    e.quantity="⚠ Required";
+    else if(isNaN(f.quantity)||Number(f.quantity)<0) e.quantity="⚠ Valid number needed";
+    if(!f.location)    e.location="⚠ Required";
+    return e;
+  }
+  function showErrors(e) {
+    const map={description:"e-desc",riNo:"e-ri",quantity:"e-qty",location:"e-loc"};
+    const imap={description:"f-desc",riNo:"f-ri",quantity:"f-qty",location:"f-loc"};
+    Object.keys(map).forEach(k=>{
+      document.getElementById(map[k]).textContent=e[k]||"";
+      document.getElementById(imap[k]).classList.toggle("err",!!e[k]);
+    });
+  }
+  function handleSave() {
+    const f=getForm(), e=validate(f);
+    if(Object.keys(e).length){showErrors(e);return;}
+    showErrors({});
+    if(editId){
+      records=records.map(r=>r.id===editId?{...f,id:editId}:r);
+      editId=null; showToast("Record updated! ✨");
+    } else {
+      records.push({...f,id:genId()}); showToast("Record saved! 🎉");
+    }
+    save(); clearForm(); setFormMode(false); render();
+  }
+  function startEdit(id) {
+    const r=records.find(r=>r.id===id); if(!r)return;
+    editId=id; setForm(r); setFormMode(true);
+    window.scrollTo({top:0,behavior:"smooth"});
+  }
+  function handleCancel() { editId=null; clearForm(); setFormMode(false); }
+  function setFormMode(isEdit) {
+    document.getElementById("form-badge").textContent  = isEdit?"✏️":"➕";
+    document.getElementById("form-title").textContent  = isEdit?"Edit Record":"Add New Item";
+    document.getElementById("save-btn").textContent    = isEdit?"⬆️ Update Record":"💾 Save Item";
+    document.getElementById("cancel-btn").style.display= isEdit?"block":"none";
+  }
+
+  // ── DELETE ────────────────────────────────────────────────────
+  function askDelete(id) { deleteId=id; document.getElementById("modal-overlay").classList.add("show"); }
+  function closeModal()  { deleteId=null; document.getElementById("modal-overlay").classList.remove("show"); }
+  document.getElementById("confirm-del-btn").onclick = ()=>{
+    if(!deleteId)return;
+    records=records.filter(r=>r.id!==deleteId);
+    save(); render(); closeModal(); showToast("Deleted! 🗑️","error");
+  };
+
+  // ── EXPORT CSV ────────────────────────────────────────────────
+  function exportCSV() {
+    const headers=["S.No","Description","RI No","Quantity","Location"];
+    let csv=headers.join(",")+"\n";
+    records.forEach((r,i)=>{
+      const row=[i+1,r.description,r.riNo,r.quantity,r.location];
+      csv+=row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(",")+"\n";
+    });
+    const blob=new Blob([csv],{type:"text/csv;charset=utf-8;"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download=`inventory_${new Date().toISOString().slice(0,10)}.csv`; a.click();
+    URL.revokeObjectURL(url); showToast("Exported! 📥");
+  }
+
+  // ── GOOGLE SHEETS ─────────────────────────────────────────────
+  function openSheetsModal() {
+    // Update record count in button
+    document.querySelector("#sheets-modal button[onclick='sendAllToSheets()']").textContent =
+      `📤 Sab Bhejo (${records.length} Records)`;
+    document.getElementById("sheets-status").style.display="none";
+    document.getElementById("sheets-modal").classList.add("show");
+  }
+  function closeSheetsModal() { document.getElementById("sheets-modal").classList.remove("show"); }
+
+  // Track sent records
+  const SENT_KEY = "inv_sheets_sent";
+  let sentIds = JSON.parse(localStorage.getItem(SENT_KEY) || "[]");
+
+  async function sendAllToSheets() {
+    const newRecords = records.filter(r => !sentIds.includes(r.id));
+
+    if (newRecords.length === 0) {
+      showSheetsStatus("✅ Sab records pehle se bheje ja chuke hain!","success");
+      return;
+    }
+
+    showSheetsStatus(`⏳ ${newRecords.length} naye records bhej raha hoon...`, "loading");
+
+    let successCount = 0;
+
+    for (const r of newRecords) {
+      try {
+        await fetch(SHEETS_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            description: r.description,
+            riNo:        r.riNo,
+            quantity:    r.quantity,
+            location:    r.location
+          })
+        });
+        sentIds.push(r.id);
+        localStorage.setItem(SENT_KEY, JSON.stringify(sentIds));
+        successCount++;
+      } catch(err) {
+        // continue with next record
+      }
+    }
+
+    if (successCount > 0) {
+      showSheetsStatus(`✅ ${successCount} records Google Sheets mein add ho gaye! Purana data safe hai.`, "success");
+      showToast(`✅ ${successCount} records Sheets mein add ho gaye!`);
+      setTimeout(closeSheetsModal, 2500);
+    } else {
+      showSheetsStatus("❌ Koi bhi record nahi bheja ja saka. Internet check karo.", "error");
+    }
+  }
+
+  function showSheetsStatus(msg, type) {
+    const el=document.getElementById("sheets-status");
+    el.style.display="block"; el.textContent=msg;
+    if(type==="success"){ el.style.background="rgba(0,200,100,0.12)"; el.style.color="#00e096"; el.style.border="1px solid rgba(0,200,100,0.25)"; }
+    else if(type==="error"){ el.style.background="rgba(255,80,80,0.1)"; el.style.color="#ff6b6b"; el.style.border="1px solid rgba(255,80,80,0.25)"; }
+    else { el.style.background="rgba(0,200,255,0.08)"; el.style.color=activeTheme==="light"?"#4455ff":"#00e5ff"; el.style.border="1px solid rgba(0,200,255,0.2)"; }
+  }
+
+  document.getElementById("sheets-modal").addEventListener("click", function(e){ if(e.target===this) closeSheetsModal(); });
+
+  // ── TOAST ─────────────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg,type="success") {
+    const el=document.getElementById("toast");
+    el.textContent=msg; el.className=`show ${type}`;
+    clearTimeout(toastTimer); toastTimer=setTimeout(()=>{el.className="";},2600);
+  }
+
+  // ── PARTICLES ─────────────────────────────────────────────────
+  (function(){
+    const cont=document.getElementById("particles");
+    for(let i=0;i<16;i++){
+      const d=document.createElement("div"); d.className="particle";
+      const size=Math.random()*3+1;
+      d.style.cssText=`left:${Math.random()*100}%;top:${Math.random()*100}%;width:${size}px;height:${size}px;animation-duration:${Math.random()*12+8}s;animation-delay:${Math.random()*8}s;opacity:${Math.random()*0.3+0.1};`;
+      cont.appendChild(d);
+    }
+  })();
+
+  // ── PWA ───────────────────────────────────────────────────────
+  let deferredPrompt;
+  window.addEventListener("beforeinstallprompt",e=>{
+    e.preventDefault(); deferredPrompt=e;
+    document.getElementById("install-banner").classList.add("show");
+  });
+  document.getElementById("install-btn").onclick=async()=>{
+    if(!deferredPrompt)return;
+    deferredPrompt.prompt();
+    const{outcome}=await deferredPrompt.userChoice;
+    deferredPrompt=null;
+    document.getElementById("install-banner").classList.remove("show");
+    if(outcome==="accepted") showToast("App installed! 🎉");
+  };
+
+  if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js").catch(console.warn);
+
+  // ── INIT ──────────────────────────────────────────────────────
+  render();
+</script>
+</body>
+</html>
